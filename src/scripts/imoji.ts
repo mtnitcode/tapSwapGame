@@ -27,7 +27,10 @@ export function createEmoji(gameElement: HTMLElement, soundElement: HTMLAudioEle
       emoji.style.top = `-30px`;
       gameElement.appendChild(emoji);
 
-     const fallInterval = setInterval(() => {
+
+      const speed = Math.floor(Math.random() * 20)+10;
+
+        const fallInterval = setInterval(() => {
          const top = parseInt(emoji.style.top, 10);
          if (top >= gameElement.clientHeight) {
              clearInterval(fallInterval);
@@ -36,7 +39,7 @@ export function createEmoji(gameElement: HTMLElement, soundElement: HTMLAudioEle
              emoji.style.top = `${top + 5}px`;
          }
          //console.log (top);
-     }, 50);
+     }, speed);
 
     emoji.addEventListener('click', (event ) => {
         //score += 1;
