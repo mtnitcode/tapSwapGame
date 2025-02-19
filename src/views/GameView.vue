@@ -42,6 +42,8 @@ body {
             font-size: 30px;
             cursor: pointer;
             user-select: none;
+            border-radius: 50%;
+            overflow: hidden;
         }
 
 </style>
