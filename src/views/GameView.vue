@@ -42,13 +42,13 @@ body {
             font-size: 30px;
             cursor: pointer;
             user-select: none;
-            border-radius: 50%;
             overflow: hidden;
         }
 
 </style>
 <script>
-import '../assets/css/flags.css';
+//import '../assets/css/flags.css';
+import '../assets/css/countries.css';
 import { createEmoji } from '../scripts/imoji';
 
 export default {
