@@ -242,13 +242,16 @@ const countryList = ["Afghanistan.png",
 let sElement : HTMLAudioElement | null = null;
 export function createEmoji(gameElement: HTMLElement, soundElement: HTMLAudioElement ): void {
     sElement = soundElement;
-
+    const flagSize = Math.floor(Math.random() * 20)+30;
     const emoji = document.createElement('div');
     const flagId = generateRandomNumber(90 , 6 , countryList);
     emoji.classList.add('flag-'+flagId);
     console.log(emoji);
-    emoji.style.left = `${Math.random() * (gameElement.offsetWidth - 30)}px`;
-    emoji.style.top = `-30px`;
+    emoji.style.left = `${Math.random() * (gameElement.offsetWidth - flagSize)}px`;
+    emoji.style.top = `-${flagSize}px`;
+    emoji.style.width = `${flagSize}px`;
+    emoji.style.height = `${flagSize}px`;
+
     gameElement.appendChild(emoji);
 
     const speed = Math.floor(Math.random() * 20)+10;
