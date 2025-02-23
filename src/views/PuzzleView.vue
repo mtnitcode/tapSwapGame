@@ -5,7 +5,8 @@
       <div id="puzzleBoard" class="puzzle-board" :style="{ '--gridSize': gridSize , '--pieceWidth': pieceWidth, '--pieceHeight': pieceHeight }">
         <PuzzlePiece
           v-for="(piece, index) in puzzlePieces"
-          :key="index"
+          :id="piece.key"
+          :key="piece.key"
           :imageUrl="piece.url"
           :index="index"
           :pWidth="pieceWidth"
@@ -26,12 +27,12 @@
       PuzzlePiece,
     },
     setup() {
-      const gridSize = ref(5); // 3x3 grid
+      const gridSize = ref(3); // 3x3 grid
       let pieceWidth = ref('100px'); // Each piece is 100px wide
       let pieceHeight = ref('100px'); // Each piece is 100px tall
 
 
-      const puzzlePieces = ref<{ url: string; index: number }[]>([]);
+      const puzzlePieces = ref<{ url: string; index: number;key:number }[]>([]);
   
       // Handle image upload
       const handleImageUpload = (event: Event) => {
@@ -46,6 +47,8 @@
         }
       };
   
+
+
       // Split the image into pieces using canvas
       const splitImageIntoPieces = (imageUrl: string) => {
         const image = new Image();
@@ -81,7 +84,7 @@
 
           const pWidth = imgWidth / gridSize.value ;
           const pHeight = imgHeight / gridSize.value;
-
+          let pieceNumber = 0;
           for (let row = 0; row < gridSize.value; row++) {
             for (let col = 0; col < gridSize.value; col++) {
               const x = col * pWidth;
@@ -110,6 +113,7 @@
               puzzlePieces.value.push({
                 url: pieceUrl,
                 index: row * gridSize.value + col,
+                key : pieceNumber++,
               });
             }
           }
@@ -126,6 +130,8 @@
       // Handle piece click
       const handlePieceClick = (index: number) => {
         console.log(`Piece ${index} clicked`);
+        console.log(areChildrenSorted("puzzleBoard"));
+
       };
   
       // Handle piece drop
@@ -135,8 +141,44 @@
         pieces[fromIndex] = pieces[toIndex];
         pieces[toIndex] = temp;
         puzzlePieces.value = pieces;
+        console.log(areChildrenSorted("puzzleBoard"));
+
+
       };
   
+      const areChildrenSorted = (parentId: string): boolean => {
+          // Get the parent container
+          const parent = document.getElementById(parentId);
+          if (!parent) {
+            console.error(`Parent container with id "${parentId}" not found.`);
+            return false;
+          }
+
+          // Get the child elements
+          const children = parent.children;
+
+          // Extract and sort the IDs
+          const ids: number[] = [];
+          for (let i = 0; i < children.length; i++) {
+            const child = children[i] as HTMLElement;
+            const id = parseInt(child.id, 10); // Convert id to number
+            if (isNaN(id)) {
+              console.error(`Invalid id "${child.id}" found in child element.`);
+              return false;
+            }
+            ids.push(id);
+          }
+
+          // Check if the IDs are sorted
+          for (let i = 1; i < ids.length; i++) {
+            if (ids[i] < ids[i - 1]) {
+              return false; // Not sorted
+            }
+          }
+
+          return true; // Sorted
+        };
+
       return {
         puzzlePieces,
         gridSize,

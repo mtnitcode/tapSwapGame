@@ -1,5 +1,5 @@
 <template>
-    <div
+    <div 
       class="puzzle-piece"
       :style="pieceStyle"
       @click="handleClick"
