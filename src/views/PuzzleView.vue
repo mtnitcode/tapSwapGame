@@ -2,7 +2,7 @@
     <div class="puzzle-game">
       <h1>Image Puzzle Game</h1>
       <input type="file" @change="handleImageUpload" accept="image/*" />
-      <div class="puzzle-board" :style="{ '--gridSize': gridSize , '--pieceWidth': pieceWidth }">
+      <div id="puzzleBoard" class="puzzle-board" :style="{ '--gridSize': gridSize , '--pieceWidth': pieceWidth, '--pieceHeight': pieceHeight }">
         <PuzzlePiece
           v-for="(piece, index) in puzzlePieces"
           :key="index"
@@ -29,7 +29,8 @@
       const gridSize = ref(5); // 3x3 grid
       let pieceWidth = ref('100px'); // Each piece is 100px wide
       let pieceHeight = ref('100px'); // Each piece is 100px tall
-        
+
+
       const puzzlePieces = ref<{ url: string; index: number }[]>([]);
   
       // Handle image upload
@@ -55,15 +56,28 @@
           if (!ctx) return;
   
           puzzlePieces.value = [];
+          const boardElement =  document.getElementById('puzzleBoard')  as HTMLInputElement;
           
+          console.log(boardElement.offsetWidth);
+          const scaleFactor  = Math.min(
+            parseFloat((boardElement.offsetWidth / image.width).toFixed(2)),
+            parseFloat((boardElement.offsetHeight / image.height).toFixed(2))
+          );
+
+          //const scalePercent :number = parseFloat((boardElement.offsetWidth / image.width).toFixed(2));  ;
+          console.log(scaleFactor);
+
           const imgWidth = image.width;
           const imgHeight = image.height;
-            console.log(imgWidth);
-            console.log(imgHeight);
 
+          console.log(imgWidth);
+          console.log(imgHeight);
 
-          pieceWidth.value = imgWidth / gridSize.value + 'px';
-          pieceHeight.value = imgHeight / gridSize.value+ 'px';
+          pieceWidth.value = (imgWidth / gridSize.value)*scaleFactor + 'px';
+          pieceHeight.value = (imgHeight / gridSize.value)*scaleFactor + 'px';
+
+          console.log(pieceWidth.value);
+          console.log(pieceHeight.value);
 
           const pWidth = imgWidth / gridSize.value ;
           const pHeight = imgHeight / gridSize.value;
@@ -144,8 +158,12 @@
   .puzzle-board {
     display: grid;
     grid-template-columns: repeat(var(--gridSize), var(--pieceWidth));
+    grid-template-rows: repeat(var(--gridSize), var(--pieceHeight));
     gap: 5px;
     justify-content: center;
     margin-top: 20px;
+    width: 80vw;
+    height: 80vh;
+    overflow: hidden;
   }
   </style>

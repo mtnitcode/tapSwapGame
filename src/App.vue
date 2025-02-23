@@ -2,7 +2,7 @@
   <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link> | 
-    <router-link to="/puzzle">About</router-link> | 
+    <router-link to="/puzzle">Puzzle</router-link> | 
     <router-link to="/game">GamePage</router-link>
   </nav>
   <router-view/>

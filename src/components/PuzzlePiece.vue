@@ -14,8 +14,6 @@
   
   <script lang="ts">
   import { defineComponent } from 'vue';
-  let pH = "pieceHeight";
-  let pW = '';
 
   export default defineComponent({
     props: {
