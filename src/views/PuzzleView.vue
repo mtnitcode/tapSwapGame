@@ -11,8 +11,11 @@
           :index="index"
           :pWidth="pieceWidth"
           :pHeight="pieceHeight"
+          :position="piece.position"
           @piece-clicked="handlePieceClick"
+          @piece-touched="handlePieceTouch"
           @piece-dropped="handlePieceDrop"
+          @piece-touchend="handlePieceTouchEnd"
         />
       </div>
     </div>
@@ -32,7 +35,7 @@
       let pieceHeight = ref('100px'); // Each piece is 100px tall
 
 
-      const puzzlePieces = ref<{ url: string; index: number;key:number }[]>([]);
+      const puzzlePieces = ref<{ url: string; index: number;key:number ;position:Object}[]>([]);
   
       // Handle image upload
       const handleImageUpload = (event: Event) => {
@@ -114,6 +117,7 @@
                 url: pieceUrl,
                 index: row * gridSize.value + col,
                 key : pieceNumber++,
+                position: { x: col * pHeight, y: row * pWidth },                
               });
             }
           }
@@ -134,6 +138,14 @@
 
       };
   
+      // Handle piece click
+      const handlePieceTouch = (index: number) => {
+
+        console.log(`Piece ${index} Touched`);
+        console.log(areChildrenSorted("puzzleBoard"));
+
+      };
+        
       // Handle piece drop
       const handlePieceDrop = ({ fromIndex, toIndex }: { fromIndex: number; toIndex: number }) => {
         const pieces = [...puzzlePieces.value];
@@ -142,10 +154,15 @@
         pieces[toIndex] = temp;
         puzzlePieces.value = pieces;
         console.log(areChildrenSorted("puzzleBoard"));
-
-
       };
-  
+      const handlePieceTouchEnd = ({ fromIndex, toIndex }: { fromIndex: number; toIndex: number }) => {
+        const pieces = [...puzzlePieces.value];
+        const temp = pieces[fromIndex];
+        pieces[fromIndex] = pieces[toIndex];
+        pieces[toIndex] = temp;
+        puzzlePieces.value = pieces;
+        console.log(areChildrenSorted("puzzleBoard"));
+      };
       const areChildrenSorted = (parentId: string): boolean => {
           // Get the parent container
           const parent = document.getElementById(parentId);
@@ -187,6 +204,8 @@
         handleImageUpload,
         handlePieceClick,
         handlePieceDrop,
+        handlePieceTouch,
+        handlePieceTouchEnd,
       };
     },
   });
